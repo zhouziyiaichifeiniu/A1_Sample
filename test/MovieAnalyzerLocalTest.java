@@ -29,7 +29,7 @@ public class MovieAnalyzerLocalTest {
             }
             imdbTop = constructor.newInstance("resources/imdb_top_500.csv");
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException | NoSuchMethodException e) {
+                IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();
             fail();
         }
@@ -138,11 +138,11 @@ public class MovieAnalyzerLocalTest {
             Object res = method.invoke(imdbTop);
             assertTrue(res instanceof Map<?, ?>);
             String expected = Files.readString(Paths.get("resources", "answers_local", "Q1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareMapWithoutOrder(res, expected, 1));
         } catch (NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException | IOException e) {
+                IllegalAccessException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -155,11 +155,11 @@ public class MovieAnalyzerLocalTest {
             Object res = method.invoke(imdbTop);
             assertTrue(res instanceof Map<?, ?>);
             String expected = Files.readString(Paths.get("resources", "answers_local", "Q1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected, mapToString(res));
         } catch (NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException | IOException e) {
+                IllegalAccessException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -172,11 +172,11 @@ public class MovieAnalyzerLocalTest {
             Object res = method.invoke(imdbTop);
             assertTrue(res instanceof Map<?, ?>);
             String expected = Files.readString(Paths.get("resources", "answers_local", "Q2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareMapWithoutOrder(res, expected, 2));
         } catch (NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException | IOException e) {
+                IllegalAccessException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -189,11 +189,11 @@ public class MovieAnalyzerLocalTest {
             Object res = method.invoke(imdbTop);
             assertTrue(res instanceof Map<?, ?>);
             String expected = Files.readString(Paths.get("resources", "answers_local", "Q2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected, mapToString(res));
         } catch (NoSuchMethodException | InvocationTargetException |
-                 IllegalAccessException | IOException e) {
+                IllegalAccessException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -207,7 +207,7 @@ public class MovieAnalyzerLocalTest {
             assertTrue(res instanceof Map<?, ?>);
             Map<List<String>, Integer> resMap = (Map<List<String>, Integer>) res;
             String expected = Files.readString(Paths.get("resources", "answers_local", "Q3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             Map<List<String>, Integer> expectedMap = stringToMap(expected);
             assertEquals(expectedMap.size(), resMap.size());
@@ -216,7 +216,7 @@ public class MovieAnalyzerLocalTest {
                 assertEquals(integer, entry.getValue());
             }
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -229,23 +229,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 20, "runtime");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q4_1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res1, expected1));
             Object res2 = method.invoke(imdbTop, 50, "runtime");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q4_2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res2, expected2));
             Object res3 = method.invoke(imdbTop, 100, "runtime");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q4_3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res3, expected3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -258,23 +258,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 20, "overview");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q4_4.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res1, expected1));
             Object res2 = method.invoke(imdbTop, 50, "overview");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q4_5.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res2, expected2));
             Object res3 = method.invoke(imdbTop, 100, "overview");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q4_6.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res3, expected3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -287,23 +287,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 20, "runtime");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q4_1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected1, listToString(res1));
             Object res2 = method.invoke(imdbTop, 50, "runtime");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q4_2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected2, listToString(res2));
             Object res3 = method.invoke(imdbTop, 100, "runtime");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q4_3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected3, listToString(res3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -316,23 +316,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 20, "overview");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q4_4.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected1, listToString(res1));
             Object res2 = method.invoke(imdbTop, 50, "overview");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q4_5.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected2, listToString(res2));
             Object res3 = method.invoke(imdbTop, 100, "overview");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q4_6.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected3, listToString(res3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -345,23 +345,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 15, "rating");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q5_1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res1, expected1));
             Object res2 = method.invoke(imdbTop, 40, "rating");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q5_2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res2, expected2));
             Object res3 = method.invoke(imdbTop, 80, "rating");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q5_3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res3, expected3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -374,23 +374,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 15, "gross");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q5_4.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res1, expected1));
             Object res2 = method.invoke(imdbTop, 40, "gross");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q5_5.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res2, expected2));
             Object res3 = method.invoke(imdbTop, 80, "gross");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q5_6.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res3, expected3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -403,23 +403,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 15, "rating");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q5_1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected1, listToString(res1));
             Object res2 = method.invoke(imdbTop, 40, "rating");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q5_2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected2, listToString(res2));
             Object res3 = method.invoke(imdbTop, 80, "rating");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q5_3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected3, listToString(res3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -432,23 +432,23 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, 15, "gross");
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q5_4.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected1, listToString(res1));
             Object res2 = method.invoke(imdbTop, 40, "gross");
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q5_5.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected2, listToString(res2));
             Object res3 = method.invoke(imdbTop, 80, "gross");
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q5_6.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected3, listToString(res3));
         } catch (NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException | IOException e) {
+                InvocationTargetException | IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -461,39 +461,39 @@ public class MovieAnalyzerLocalTest {
             Object res1 = method.invoke(imdbTop, "Drama", 9.0f, 150);
             assertTrue(res1 instanceof List<?>);
             String expected1 = Files.readString(Paths.get("resources", "answers_local", "Q6_1.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res1, expected1));
             assertEquals(expected1, listToString(res1));
             Object res2 = method.invoke(imdbTop, "Adventure", 8.0f, 150);
             assertTrue(res2 instanceof List<?>);
             String expected2 = Files.readString(Paths.get("resources", "answers_local", "Q6_2.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res2, expected2));
             assertEquals(expected2, listToString(res2));
             Object res3 = method.invoke(imdbTop, "Sci-Fi", 8.2f, 200);
             assertTrue(res3 instanceof List<?>);
             String expected3 = Files.readString(Paths.get("resources", "answers_local", "Q6_3.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res3, expected3));
             assertEquals(expected3, listToString(res3));
             Object res4 = method.invoke(imdbTop, "Adventure", 8.6f, 120);
             assertTrue(res4 instanceof List<?>);
             String expected4 = Files.readString(Paths.get("resources", "answers_local", "Q6_4.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertEquals(expected4, listToString(res4));
             Object res5 = method.invoke(imdbTop, "Action", 7.7f, 200);
             assertTrue(res5 instanceof List<?>);
             String expected5 = Files.readString(Paths.get("resources", "answers_local", "Q6_5.txt"),
-                            StandardCharsets.UTF_8)
+                    StandardCharsets.UTF_8)
                     .replace("\r", "").strip();
             assertTrue(compareListWithoutOrder(res5, expected5));
             assertEquals(expected5, listToString(res5));
         } catch (InvocationTargetException | NoSuchMethodException |
-                 IllegalAccessException | IOException e) {
+                IllegalAccessException | IOException e) {
             e.printStackTrace();
             fail();
         }

@@ -4,57 +4,56 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MovieAnalyzer {
     static Stream<Movie> movies;
+    String path;
 
-    public static void main(String[] args) {
-        try {
-            new MovieAnalyzer("C:\\Users\\user\\Desktop\\A1_Sample\\resources\\imdb_top_500.csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public MovieAnalyzer(String dataset_path) throws IOException {
+        path = dataset_path;
         movies = Files.lines(Paths.get(dataset_path), StandardCharsets.UTF_8)
-                .filter(l -> l.startsWith("\""))
-                .map(l -> l.split(","))
-                .map(a -> new Movie(a[0],a[1], Integer.parseInt(a[2]), a[3],a[4],a[5],Float.parseFloat(a[6]),a[7],Integer.parseInt(a[8]),a[9],a[10],a[11],a[12],a[13],Integer.parseInt(a[14]),Long.parseLong(a[15])));
+                .filter(s->s.startsWith("\""))
+                .map(l -> l.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"))
+                .map(a -> new Movie(a[0], a[1], Integer.parseInt(a[2]), a[3], a[4], a[5], Float.parseFloat(a[6]), a[7], Integer.parseInt(a[8]), a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]), Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
     }
 
     public Map<Integer, Integer> getMovieCountByYear() {
-        Map<Integer, Integer> movie=movies.sorted((o1, o2) -> o1.getReleased_Year() - o2.getReleased_Year()).collect(Collectors.groupingBy(Movie::getReleased_Year,Collectors.reducing(0, e->1,Integer::sum)));
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+
+        Map<Integer, Integer> movie =streamSupplier.get().sorted((o1, o2) -> o1.getReleased_Year() - o2.getReleased_Year()).collect(Collectors.groupingBy(Movie::getReleased_Year, Collectors.reducing(0, e -> 1, Integer::sum)));
         return movie;
     }
 
     public Map<String, Integer> getMovieCountByGenre() {
-        Map<String,Integer> movie = movies.sorted(new Comparator<Movie>() {
-            @Override
-            public int compare(Movie o1, Movie o2) {
-              return   o1.getGenre().compareTo(o2.getGenre());
-            }
-        }).collect(Collectors.groupingBy(Movie::getGenre,Collectors.reducing(0,e->1,Integer::sum)));
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+        Map<String, Integer> movie = streamSupplier.get().sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre())).collect(Collectors.groupingBy(Movie::getGenre, Collectors.reducing(0, e -> 1, Integer::sum)));
         return movie;
     }
 
     public Map<List<String>, Integer> getCoStarCount() {
-        Map<List<String>,Integer> movie = new HashMap<>();
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+        Map<List<String>, Integer> movie = new HashMap<>();
         return movie;
     }
 
     public List<String> getTopMovies(int top_k, String by) {
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
         List<String> movie = new ArrayList<>();
         return movie;
     }
 
     public List<String> getTopStars(int top_k, String by) {
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
         List<String> movie = new ArrayList<>();
         return movie;
     }
-    public List<String> searchMovies(String genre, float min_rating, int max_runtime){
+
+    public List<String> searchMovies(String genre, float min_rating, int max_runtime) {
+        Supplier<Stream<Movie>> streamSupplier = () -> movies;
         List<String> movie = new ArrayList<>();
         return movie;
     }
@@ -77,7 +76,7 @@ public class MovieAnalyzer {
         private Integer Noofvotes;
         private Long Gross;
 
-        public Movie(String nothing,String series_Title, Integer released_Year, String certificate, String runtime, String genre, Float IMDB_Rating, String overview, Integer meta_score, String director, String star1, String star2, String star3, String star4, Integer noofvotes, Long gross) {
+        public Movie(String nothing, String series_Title, Integer released_Year, String certificate, String runtime, String genre, Float IMDB_Rating, String overview, Integer meta_score, String director, String star1, String star2, String star3, String star4, Integer noofvotes, Long gross) {
             Nothing = nothing;
             Series_Title = series_Title;
             Released_Year = released_Year;

@@ -16,10 +16,12 @@ public class MovieAnalyzer {
     static Stream<Movie> movies;
     static String path;
     public static Stream<Movie> readMovies() throws IOException {
+        // certificate, meta_score, gross might be null
         return Files.lines(Paths.get(path), StandardCharsets.UTF_8)
                 .filter(s->s.startsWith("\""))
                 .map(l -> l.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"))
-                .map(a -> new Movie(a[0], a[1], Integer.parseInt(a[2]), a[3], a[4], a[5], Float.parseFloat(a[6]), a[7], Integer.parseInt(a[8]), a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]), Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
+                .filter(a->a.length>0)
+                .map(a -> new Movie(a[0], a[1], Integer.parseInt(a[2]), a[3], a[4], a[5], Float.parseFloat(a[6]), a[7], a[8].length()>0?Integer.parseInt(a[8]):0, a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]),a.length<16?0L: Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
     }
 
     public MovieAnalyzer(String dataset_path) throws IOException {

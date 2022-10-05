@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,49 +14,50 @@ import java.util.stream.Stream;
 
 public class MovieAnalyzer {
     static Stream<Movie> movies;
-    String path;
-
-    public MovieAnalyzer(String dataset_path) throws IOException {
-        path = dataset_path;
-        movies = Files.lines(Paths.get(dataset_path), StandardCharsets.UTF_8)
+    static String path;
+    public static Stream<Movie> readMovies() throws IOException {
+        return Files.lines(Paths.get(path), StandardCharsets.UTF_8)
                 .filter(s->s.startsWith("\""))
                 .map(l -> l.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"))
                 .map(a -> new Movie(a[0], a[1], Integer.parseInt(a[2]), a[3], a[4], a[5], Float.parseFloat(a[6]), a[7], Integer.parseInt(a[8]), a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]), Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
     }
 
-    public Map<Integer, Integer> getMovieCountByYear() {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+    public MovieAnalyzer(String dataset_path) throws IOException {
+        path = dataset_path;
+        }
 
-        Map<Integer, Integer> movie =streamSupplier.get().sorted((o1, o2) -> o1.getReleased_Year() - o2.getReleased_Year()).collect(Collectors.groupingBy(Movie::getReleased_Year, Collectors.reducing(0, e -> 1, Integer::sum)));
+    public Map<Integer, Integer> getMovieCountByYear() throws IOException {
+        movies = readMovies();
+        Map<Integer, Integer> movie =movies.sorted((o1, o2) -> o1.getReleased_Year() - o2.getReleased_Year()).collect(Collectors.groupingBy(Movie::getReleased_Year, Collectors.reducing(0, e -> 1, Integer::sum)));
         return movie;
     }
 
-    public Map<String, Integer> getMovieCountByGenre() {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
-        Map<String, Integer> movie = streamSupplier.get().sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre())).collect(Collectors.groupingBy(Movie::getGenre, Collectors.reducing(0, e -> 1, Integer::sum)));
+    public Map<String, Integer> getMovieCountByGenre() throws IOException {
+        movies = readMovies();
+        Map<String, Integer> movie = movies.sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre())).collect(Collectors.groupingBy(Movie::getGenre, Collectors.reducing(0, e -> 1, Integer::sum)));
         return movie;
     }
 
-    public Map<List<String>, Integer> getCoStarCount() {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+    public Map<List<String>, Integer> getCoStarCount() throws IOException {
+        movies = readMovies();
         Map<List<String>, Integer> movie = new HashMap<>();
         return movie;
     }
 
-    public List<String> getTopMovies(int top_k, String by) {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+    public List<String> getTopMovies(int top_k, String by) throws IOException {
+        movies = readMovies();
         List<String> movie = new ArrayList<>();
         return movie;
     }
 
-    public List<String> getTopStars(int top_k, String by) {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+    public List<String> getTopStars(int top_k, String by) throws IOException {
+        movies = readMovies();
         List<String> movie = new ArrayList<>();
         return movie;
     }
 
-    public List<String> searchMovies(String genre, float min_rating, int max_runtime) {
-        Supplier<Stream<Movie>> streamSupplier = () -> movies;
+    public List<String> searchMovies(String genre, float min_rating, int max_runtime) throws IOException {
+        movies = readMovies();
         List<String> movie = new ArrayList<>();
         return movie;
     }

@@ -23,24 +23,18 @@ public class MovieAnalyzer {
                 .filter(s->s.startsWith("\""))
                 .map(l -> l.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"))
                 .filter(a->a.length>0)
-                .map(a -> new Movie(a[0], a[1].startsWith("\"") ? a[1].substring(1,a[1].length()-1):a[1], Integer.parseInt(a[2]), a[3], a[4], a[5], Float.parseFloat(a[6]), a[7], a[8].length()>0?Integer.parseInt(a[8]):0, a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]),a.length<16?0L: Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
+                .map(a -> new Movie(a[0], a[1].startsWith("\"") ? a[1].substring(1,a[1].length()-1):a[1], Integer.parseInt(a[2]), a[3], a[4],a[5].startsWith("\"")? a[5].substring(1,a[5].length()-1):a[5], Float.parseFloat(a[6]), a[7].startsWith("\"")?a[7].substring(1,a[7].length()-1):a[7], a[8].length()>0?Integer.parseInt(a[8]):0, a[9], a[10], a[11], a[12], a[13], Integer.parseInt(a[14]),a.length<16?0L: Long.parseLong(a[15].substring(1,a[15].length()-1).replace(",",""))));
     }
 
-    public static void main(String[] args) throws IOException {
-        MovieAnalyzer movieAnalyzer = new MovieAnalyzer("C:\\Users\\user\\Desktop\\A1_Sample\\resources\\imdb_top_500.csv");
-        List<String> list= movieAnalyzer.searchMovies("Adventure", 8.0f, 150);
-        for (String s:
-             list) {
-            System.out.println(s);
-        }
-    }
+
     public MovieAnalyzer(String dataset_path) throws IOException {
         path = dataset_path;
         }
 
     public Map<Integer, Integer> getMovieCountByYear() throws IOException {
         movies = readMovies();
-        Map<Integer, Integer> movie =movies.sorted(((o1, o2) -> o1.getReleased_Year()-o2.getReleased_Year())).collect(Collectors.groupingBy(Movie::getReleased_Year, Collectors.reducing(0, e -> 1, Integer::sum)));
+        Map<Integer, Integer> movie =movies.sorted((Comparator.comparingInt(Movie::getReleased_Year)))
+                .collect(Collectors.groupingBy(Movie::getReleased_Year, Collectors.reducing(0, e -> 1, Integer::sum)));
         TreeMap<Integer,Integer> ans = new TreeMap<>((o1,o2)->o2-o1);
         Iterator<Map.Entry<Integer,Integer>> iterator = movie.entrySet().iterator();
         while (iterator.hasNext()){
@@ -52,10 +46,20 @@ public class MovieAnalyzer {
 
     public Map<String, Integer> getMovieCountByGenre() throws IOException {
         movies = readMovies();
+
         Map<String, Integer> movie = movies.sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre()))
                 .collect(Collectors
-                        .groupingBy(Movie::getGenre, Collectors.reducing(0, e -> 1, Integer::sum)));
-        return movie;
+                        .groupingBy(o->o.getGenre(), Collectors.reducing(0, e -> 1, Integer::sum)));
+
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(movie.entrySet());
+        Collections.sort(list, (o1, o2) -> o2.getValue()-o1.getValue());
+        LinkedHashMap<String,Integer> ans = new LinkedHashMap<>();
+        for (Map.Entry<String,Integer> e:
+             list) {
+            ans.put(e.getKey(),e.getValue());
+        }
+
+        return ans;
     }
 
     public Map<List<String>, Integer> getCoStarCount() throws IOException {
@@ -66,20 +70,29 @@ public class MovieAnalyzer {
 
     public List<String> getTopMovies(int top_k, String by) throws IOException {
         movies = readMovies();
-        List<String> movie = new ArrayList<>();
+        List<String> movie =movies.sorted((Comparator.comparing(Movie::getSeries_Title)))
+                .sorted(((o1, o2) -> by.equals("runtime")? Integer.parseInt(o2.getRuntime().split(" ")[0]) - Integer.parseInt(o1.getRuntime().split(" ")[0]) :o2.getOverview().length()-o1.getOverview().length()))
+                .limit(top_k)
+                .map(Movie::getSeries_Title)
+                .collect(Collectors.toList());
         return movie;
     }
 
     public List<String> getTopStars(int top_k, String by) throws IOException {
         movies = readMovies();
-        List<String> movie = new ArrayList<>();
+        List<String> movie = movies.filter(o->o.getGross()>0)
+                .sorted(Comparator.comparing(Movie::getStar1))
+                .sorted(((o1, o2) -> by.equals("rating?") ?Double.compare((double )o2.getIMDB_Rating(),(double) o1.getIMDB_Rating()):Long.compare(o2.getGross(),o1.getGross())))
+                .limit(top_k)
+                .map(Movie::getStar1)
+                .collect(Collectors.toList());
         return movie;
     }
 
     public List<String> searchMovies(String genre, float min_rating, int max_runtime) throws IOException {
         movies = readMovies();
         List<String> movie = movies.filter(l->l.getGenre().contains(genre)&&(double)l.getIMDB_Rating() >=(double)min_rating && Integer.parseInt(l.getRuntime().split(" ")[0]) <=max_runtime)
-                .sorted((o1,o2)->o1.getSeries_Title().compareTo(o2.getSeries_Title()))
+                .sorted(Comparator.comparing(Movie::getSeries_Title))
                 .map(Movie::getSeries_Title)
                 .collect(Collectors.toList());
         return movie;

@@ -75,9 +75,64 @@ public class MovieAnalyzer {
         return ans;
     }
 
+    public static void main(String[] args) throws IOException {
+       Map<List<String>,Integer>map= new MovieAnalyzer("C:\\Users\\user\\Desktop\\A1_Sample\\resources\\imdb_top_500.csv").getCoStarCount();
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            for (Map.Entry<List<String>, Integer> listIntegerEntry : map.entrySet()) {
+                System.out.println(listIntegerEntry.getKey()+" == "+listIntegerEntry.getValue());
+            }
+        }
+    }
     public Map<List<String>, Integer> getCoStarCount() throws IOException {
         movies = readMovies();
-        Map<List<String>, Integer> movie = new HashMap<>();
+        List<Movie> list = movies.collect(Collectors.toList());
+        List<List<String>> stars = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            List<String> temp= new ArrayList<>();
+            String star1 = list.get(i).getStar1();
+            String star2 = list.get(i).getStar2();
+            String star3 = list.get(i).getStar3();
+            String star4 = list.get(i).getStar4();
+            temp.add(star1);
+            temp.add(star2);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+            temp = new ArrayList<>();
+            temp.add(star1);
+            temp.add(star3);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+            temp = new ArrayList<>();
+            temp.add(star1);
+            temp.add(star4);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+            temp = new ArrayList<>();
+            temp.add(star2);
+            temp.add(star3);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+            temp = new ArrayList<>();
+            temp.add(star4);
+            temp.add(star2);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+            temp = new ArrayList<>();
+            temp.add(star3);
+            temp.add(star4);
+            Collections.sort(temp,(o1, o2) -> o1.compareTo(o2));
+            stars.add(temp);
+        }
+        Map<List<String>, Integer> movie =new HashMap<>();
+        for (int i = 0; i < stars.size(); i++) {
+            if (movie.get(stars.get(i)) == null){
+                movie.put(stars.get(i),1);
+            }
+            else {
+                movie.put(stars.get(i),movie.get(stars.get(i))+1);
+            }
+        }
         return movie;
     }
 

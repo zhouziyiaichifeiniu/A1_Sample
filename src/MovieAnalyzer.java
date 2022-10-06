@@ -46,12 +46,25 @@ public class MovieAnalyzer {
 
     public Map<String, Integer> getMovieCountByGenre() throws IOException {
         movies = readMovies();
+        List<Movie> list1 = movies.collect(Collectors.toList());
+        Map<String,Integer> map = new HashMap<>();
+        for (int i = 0; i < list1.size(); i++) {
+            String[] strings= list1.get(i).getGenre().split(", ");
+            for (int j = 0; j < strings.length; j++) {
+                if (map.get(strings[j]) == null) {
+                    map.put(strings[j], 1);
+                } else {
+                    map.put(strings[j], map.get(strings[j]) + 1);
+                }
+            }
+        }
 
-        Map<String, Integer> movie = movies.sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre()))
+        /*Map<String, Integer> movie = movies.sorted((o1, o2) -> o1.getGenre().compareTo(o2.getGenre()))
                 .collect(Collectors
-                        .groupingBy(o->o.getGenre(), Collectors.reducing(0, e -> 1, Integer::sum)));
-
-        List<Map.Entry<String,Integer>> list = new ArrayList<>(movie.entrySet());
+                        .groupingBy(o->o.getGenre(), Collectors.reducing(0, e -> 1, Integer::sum)));*/
+        /////////////////////////////////////////////map
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(map.entrySet());
+        Collections.sort(list,((o1, o2) -> o1.getKey().compareTo(o2.getKey())));
         Collections.sort(list, (o1, o2) -> o2.getValue()-o1.getValue());
         LinkedHashMap<String,Integer> ans = new LinkedHashMap<>();
         for (Map.Entry<String,Integer> e:

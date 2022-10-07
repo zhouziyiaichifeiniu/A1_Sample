@@ -75,15 +75,7 @@ public class MovieAnalyzer {
         return ans;
     }
 
-    public static void main(String[] args) throws IOException {
-       Map<List<String>,Integer>map= new MovieAnalyzer("C:\\Users\\user\\Desktop\\A1_Sample\\resources\\imdb_top_500.csv").getCoStarCount();
-        Iterator iterator = map.entrySet().iterator();
-        while (iterator.hasNext()){
-            for (Map.Entry<List<String>, Integer> listIntegerEntry : map.entrySet()) {
-                System.out.println(listIntegerEntry.getKey()+" == "+listIntegerEntry.getValue());
-            }
-        }
-    }
+
     public Map<List<String>, Integer> getCoStarCount() throws IOException {
         movies = readMovies();
         List<Movie> list = movies.collect(Collectors.toList());
@@ -148,13 +140,100 @@ public class MovieAnalyzer {
 
     public List<String> getTopStars(int top_k, String by) throws IOException {
         movies = readMovies();
-        List<String> movie = movies.filter(o->o.getGross()>0)
-                .sorted(Comparator.comparing(Movie::getStar1))
-                .sorted(((o1, o2) -> by.equals("rating?") ?Double.compare((double )o2.getIMDB_Rating(),(double) o1.getIMDB_Rating()):Long.compare(o2.getGross(),o1.getGross())))
-                .limit(top_k)
-                .map(Movie::getStar1)
-                .collect(Collectors.toList());
-        return movie;
+        List<Movie> list = movies.collect(Collectors.toList());
+        Map<String, Double> rating = new HashMap<>();
+        Map<String,Long> gross = new HashMap<>();
+        Map<String,Integer> count = new HashMap<>();
+        if (by.equals("rating")){
+            for (Movie movie : list) {
+
+                if (rating.get(movie.getStar1()) == null) {
+                    count.put(movie.getStar1(),1);
+                    rating.put(movie.getStar1(), (double) movie.getIMDB_Rating());
+                } else {
+                    count.put(movie.getStar1(),count.get(movie.getStar1())+1);
+                    rating.put(movie.getStar1(), rating.get(movie.getStar1()) + (double) movie.getIMDB_Rating());
+                }
+                if (rating.get(movie.getStar2()) == null) {
+                    count.put(movie.getStar2(),1);
+                    rating.put(movie.getStar2(), (double) movie.getIMDB_Rating());
+                } else {
+                    count.put(movie.getStar2(),count.get(movie.getStar2())+1);
+                    rating.put(movie.getStar2(), rating.get(movie.getStar2()) + (double) movie.getIMDB_Rating());
+                }
+                if (rating.get(movie.getStar3()) == null) {
+                    count.put(movie.getStar3(),1);
+                    rating.put(movie.getStar3(), (double) movie.getIMDB_Rating());
+                } else {
+                    count.put(movie.getStar3(),count.get(movie.getStar3())+1);
+                    rating.put(movie.getStar3(), rating.get(movie.getStar3()) + (double) movie.getIMDB_Rating());
+                }
+                if (rating.get(movie.getStar4()) == null) {
+                    count.put(movie.getStar4(),1);
+                    rating.put(movie.getStar4(), (double) movie.getIMDB_Rating());
+                } else {
+                    count.put(movie.getStar4(),count.get(movie.getStar4())+1);
+                    rating.put(movie.getStar4(), rating.get(movie.getStar4()) + (double) movie.getIMDB_Rating());
+                }
+            }
+            List<Map.Entry<String,Double>> list1 = new ArrayList<>(rating.entrySet());
+            for (int i = 0; i < list1.size(); i++) {
+                list1.get(i).setValue(list1.get(i).getValue()/count.get(list1.get(i).getKey()));
+            }
+            Collections.sort(list1,((o1, o2) -> o1.getKey().compareTo(o2.getKey())));
+            Collections.sort(list1, (o1, o2) ->Double.compare(o2.getValue(), o1.getValue()));
+            List<String> ans = new ArrayList<>();
+            for (int i = 0; i < top_k; i++) {
+                ans.add(list1.get(i).getKey());
+            }
+            return ans;
+        }else {
+            for (Movie movie : list) {
+                if (movie.getGross()==0)
+                    continue;
+
+                if (gross.get(movie.getStar1()) == null) {
+                    count.put(movie.getStar1(), 1);
+                    gross.put(movie.getStar1(), movie.getGross());
+                } else {
+                    count.put(movie.getStar1(), count.get(movie.getStar1()) + 1);
+                    gross.put(movie.getStar1(), movie.getGross() + gross.get(movie.getStar1()));
+                }
+                if (gross.get(movie.getStar2()) == null) {
+                    count.put(movie.getStar2(), 1);
+                    gross.put(movie.getStar2(), movie.getGross());
+                } else {
+                    count.put(movie.getStar2(), count.get(movie.getStar2()) + 1);
+                    gross.put(movie.getStar2(), movie.getGross() + gross.get(movie.getStar2()));
+                }
+                if (gross.get(movie.getStar3()) == null) {
+                    count.put(movie.getStar3(), 1);
+                    gross.put(movie.getStar3(), movie.getGross());
+                } else {
+                    count.put(movie.getStar3(), count.get(movie.getStar3()) + 1);
+                    gross.put(movie.getStar3(), movie.getGross() + gross.get(movie.getStar3()));
+                }
+                if (gross.get(movie.getStar4()) == null) {
+                    count.put(movie.getStar4(), 1);
+                    gross.put(movie.getStar4(), movie.getGross());
+                } else {
+                    count.put(movie.getStar4(), count.get(movie.getStar4()) + 1);
+                    gross.put(movie.getStar4(), movie.getGross() + gross.get(movie.getStar4()));
+                }
+            }
+            List<Map.Entry<String,Long>> list1 = new ArrayList<>(gross.entrySet());
+            for (int i = 0; i < list1.size(); i++) {
+                list1.get(i).setValue(list1.get(i).getValue()/count.get(list1.get(i).getKey()));
+            }
+            Collections.sort(list1,((o1, o2) -> o1.getKey().compareTo(o2.getKey())));
+            Collections.sort(list1, (o1, o2) ->Long.compare(o2.getValue(), o1.getValue()));
+            List<String> ans = new ArrayList<>();
+            for (int i = 0; i < top_k; i++) {
+                ans.add(list1.get(i).getKey());
+            }
+            return ans;
+        }
+
     }
 
     public List<String> searchMovies(String genre, float min_rating, int max_runtime) throws IOException {
@@ -166,7 +245,7 @@ public class MovieAnalyzer {
         return movie;
     }
 
-    public static class Movie {
+    public class Movie {
         private String Nothing;
         private String Series_Title;
         private Integer Released_Year;
